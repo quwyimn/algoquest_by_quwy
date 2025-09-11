@@ -32,7 +32,7 @@ const StageDetail = () => {
         <>
           <ul>
             {quizzes.map((quiz, index) => (
-              <li key={quiz.id} style={{ textAlign: 'left' }}>
+              <li key={quiz._id} style={{ textAlign: 'left' }}>
                 <p><strong>Câu {index + 1}:</strong> {quiz.question}</p>
               </li>
             ))}
