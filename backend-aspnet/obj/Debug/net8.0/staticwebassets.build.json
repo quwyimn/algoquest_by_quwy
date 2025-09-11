@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "se/zApycMkkkxEDoGOOVeKB1d5O4QIkKFljzfm4nAQg=",
+  "Source": "backend-aspnet",
+  "BasePath": "_content/backend-aspnet",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
