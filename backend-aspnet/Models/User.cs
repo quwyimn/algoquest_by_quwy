@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend_aspnet.Models;
 
+[BsonIgnoreExtraElements]
 public class User
 {
     [BsonId]
@@ -26,4 +27,8 @@ public class User
 
     [BsonElement("badges")]
     public List<string> Badges { get; set; } = new List<string>();
+
+    // THÊM THUỘC TÍNH MỚI Ở ĐÂY
+    [BsonElement("role")]
+    public string Role { get; set; } = "Player"; // Mặc định mọi user mới đều là "Player"
 }

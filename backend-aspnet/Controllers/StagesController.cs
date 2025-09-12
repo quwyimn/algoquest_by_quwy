@@ -5,7 +5,7 @@ using backend_aspnet.Services;
 namespace backend_aspnet.Controllers;
 
 [ApiController]
-[Route("api/[controller]")] // -> /api/stages
+[Route("api/[controller]")]
 public class StagesController : ControllerBase
 {
     private readonly MongoDbService _mongoDbService;
@@ -15,8 +15,16 @@ public class StagesController : ControllerBase
         _mongoDbService = mongoDbService;
     }
 
-    // GET /api/stages
+    // API cho Player: Lấy tất cả màn chơi
     [HttpGet]
     public async Task<List<Stage>> Get() =>
         await _mongoDbService.GetStagesAsync();
+
+    // API cho Admin: Thêm một màn chơi mới
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] Stage stage)
+    {
+        await _mongoDbService.CreateStageAsync(stage);
+        return CreatedAtAction(nameof(Get), new { id = stage.Id }, stage);
+    }
 }

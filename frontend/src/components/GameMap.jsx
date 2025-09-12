@@ -10,7 +10,7 @@ const GameMap = () => {
   useEffect(() => {
     const fetchStages = async () => {
       try {
-        const response = await axios.get('http://localhost:5135/api/stages');
+        const response = await axios.get('/api/stages');
         setStages(response.data);
       } catch (err) {
         setError('Không thể tải được danh sách màn chơi.');

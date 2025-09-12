@@ -1,5 +1,6 @@
 /home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/appsettings.Development.json
 /home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/appsettings.json
+/home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/backend-aspnet.staticwebassets.runtime.json
 /home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/backend-aspnet
 /home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/backend-aspnet.deps.json
 /home/quwy/algoquest/backend-aspnet/bin/Debug/net8.0/backend-aspnet.runtimeconfig.json

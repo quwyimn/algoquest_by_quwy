@@ -11,7 +11,7 @@ const StageDetail = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`http://localhost:5135/api/quizzes/${stageId}`);
+        const response = await axios.get(`/api/quizzes/${stageId}`);
         setQuizzes(response.data);
       } catch (err) {
         setError('Không thể tải được danh sách câu đố.');

@@ -21,39 +21,40 @@ public class MongoDbService
         _quizzesCollection = database.GetCollection<Quiz>("quizzes");
     }
 
+    // --- CÁC HÀM PHẢI NẰM BÊN TRONG LỚP NÀY ---
 
     public async Task CreateUserAsync(User user)
     {
         await _usersCollection.InsertOneAsync(user);
-        return;
     }
-    
-    
-// Lấy tất cả màn chơi, sắp xếp theo thứ tự
+
     public async Task<List<Stage>> GetStagesAsync() =>
-    await _stagesCollection.Find(_ => true).SortBy(s => s.Order).ToListAsync();
+        await _stagesCollection.Find(_ => true).SortBy(s => s.Order).ToListAsync();
 
-// Lấy tất cả câu đố của một màn chơi
     public async Task<List<Quiz>> GetQuizzesByStageIdAsync(string stageId) =>
-    await _quizzesCollection.Find(q => q.StageId == stageId).ToListAsync();
+        await _quizzesCollection.Find(q => q.StageId == stageId).ToListAsync();
 
-// Tìm một người dùng bằng email
     public async Task<User?> GetUserByEmailAsync(string email) =>
-    await _usersCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
+        await _usersCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
 
-// Cập nhật điểm XP cho người dùng
     public async Task UpdateUserXpAsync(string userId, int xpEarned)
-{
-    
-    if (!ObjectId.TryParse(userId, out _))
     {
-   
-        Console.WriteLine($"Invalid UserId format: {userId}");
-        return;
+        if (!ObjectId.TryParse(userId, out _))
+        {
+            return;
+        }
+        var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+        var update = Builders<User>.Update.Inc(u => u.Xp, xpEarned);
+        await _usersCollection.UpdateOneAsync(filter, update);
     }
 
-    var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
-    var update = Builders<User>.Update.Inc(u => u.Xp, xpEarned);
-    await _usersCollection.UpdateOneAsync(filter, update);
-}
-} 
+    public async Task CreateStageAsync(Stage stage)
+    {
+        await _stagesCollection.InsertOneAsync(stage);
+    }
+
+    public async Task CreateQuizAsync(Quiz quiz)
+    {
+        await _quizzesCollection.InsertOneAsync(quiz);
+    }
+} // <-- Dấu ngoặc nhọn kết thúc của lớp

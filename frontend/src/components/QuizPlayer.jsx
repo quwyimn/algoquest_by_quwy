@@ -19,7 +19,7 @@ const QuizPlayer = ({ user }) => {
     const fetchQuizzes = async () => {
       try {
         // ĐÃ SỬA LỖI Ở ĐÂY (dùng dấu ` `)
-        const response = await axios.get(`http://localhost:5135/api/quizzes/${stageId}`);
+        const response = await axios.get(`/api/quizzes/${stageId}`);
         setQuizzes(response.data);
       } catch (err) {
         setError('Không thể tải câu đố.');
@@ -35,7 +35,7 @@ const QuizPlayer = ({ user }) => {
       const updateProgress = async () => {
         try {
           const xpEarned = score * 10;
-          await axios.post('http://localhost:5135/api/users/update-progress', {
+          await axios.post('/api/users/update-progress', {
             userId: user.id,
             xpEarned: xpEarned,
           });
