@@ -31,7 +31,7 @@ public class UsersController : ControllerBase
         _mongoDbService = mongoDbService;
     }
 
-    // POST /api/users/register
+    // POST http://localhost:5135/api/users/register
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] User newUser)
     {
@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
         return StatusCode(201, newUser);
     }
 
-    // POST /api/users/login
+    // POST http://localhost:5135/api/users/login
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
@@ -60,7 +60,7 @@ public class UsersController : ControllerBase
         return Ok(new { message = "✅ Đăng nhập thành công!", user = userResponse });
     }
 
-    // POST /api/users/update-progress
+    // POST http://localhost:5135/api/users/update-progress
     [HttpPost("update-progress")]
     public async Task<IActionResult> UpdateProgress([FromBody] UpdateProgressRequest request)
     {

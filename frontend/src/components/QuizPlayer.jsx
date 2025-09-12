@@ -18,11 +18,11 @@ const QuizPlayer = ({ user }) => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        // ĐÃ SỬA LỖI Ở ĐÂY (dùng dấu ` `)
-        const response = await axios.get(`/api/quizzes/${stageId}`);
+        const response = await axios.get(`/api/quizzes/${stageId}`); // Đã sửa lại URL
         setQuizzes(response.data);
-      } catch (err) {
+      } catch (err) { // ĐÃ SỬA LẠI Ở ĐÂY
         setError('Không thể tải câu đố.');
+        console.error("Lỗi khi tải câu đố:", err);
       } finally {
         setLoading(false);
       }

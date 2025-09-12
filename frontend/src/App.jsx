@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 
 import GameMap from './components/GameMap';
@@ -7,21 +7,28 @@ import StageDetail from './components/StageDetail';
 import QuizPlayer from './components/QuizPlayer';
 import Login from './components/Login';
 import Register from './components/Register';
-
-// Layout cho các trang cần đăng nhập
-const ProtectedLayout = ({ user }) => {
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  // Outlet sẽ render các component con (GameMap, StageDetail...)
-  return <Outlet />; 
-};
+import AdminDashboard from './components/AdminDashboard';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, []);
+
   const handleLoginSuccess = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
   };
 
   return (
@@ -31,7 +38,17 @@ function App() {
           <h1>AlgoQuest: Chuyến Phiêu Lưu Giải Thuật</h1>
           <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             {user ? (
-              <span>Xin chào, {user.username}!</span>
+              <>
+                {user.role === 'Admin' && (
+                  <Link to="/admin" style={{ color: 'white', fontWeight: 'bold' }}>
+                    Trang Admin
+                  </Link>
+                )}
+                <span>Xin chào, {user.username}!</span>
+                <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', textDecoration: 'underline' }}>
+                  Đăng xuất
+                </button>
+              </>
             ) : (
               <>
                 <Link to="/login" style={{ color: 'white' }}>Đăng nhập</Link>
@@ -42,16 +59,18 @@ function App() {
         </header>
         <main>
           <Routes>
-            {/* Các trang công khai */}
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+            <Route path="/register" element={<Register user={user} />} />
+            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} user={user} />} />
             
-            {/* Nhóm các trang được bảo vệ */}
-            <Route element={<ProtectedLayout user={user} />}>
-              <Route path="/" element={<GameMap />} />
-              <Route path="/stage/:stageId" element={<StageDetail />} />
-              <Route path="/play/:stageId" element={<QuizPlayer user={user} />} />
-            </Route>
+            <Route path="/admin" element={
+              <AdminRoute user={user}>
+                <AdminDashboard />
+              </AdminRoute>
+            } />
+
+            <Route path="/" element={user ? <GameMap /> : <Navigate to="/login" />} />
+            <Route path="/stage/:stageId" element={user ? <StageDetail /> : <Navigate to="/login" />} />
+            <Route path="/play/:stageId" element={user ? <QuizPlayer user={user} /> : <Navigate to="/login" />} />
           </Routes>
         </main>
       </div>

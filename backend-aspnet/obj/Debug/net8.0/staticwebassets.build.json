@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vMwLnRw2uHRbkDLcq6eHr7Z5Y7p5/FQ6mQTbv7MIk04=",
+  "Hash": "IFQm26FpobUCLTMeFrvgTInggVODdDTrzbk9cFrn9gw=",
   "Source": "backend-aspnet",
   "BasePath": "_content/backend-aspnet",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-BsHd2EfM.js",
+      "Identity": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-C8jvLSyK.js",
       "SourceId": "backend-aspnet",
       "SourceType": "Discovered",
       "ContentRoot": "/home/quwy/algoquest/backend-aspnet/wwwroot/",
       "BasePath": "_content/backend-aspnet",
-      "RelativePath": "assets/index-BsHd2EfM.js",
+      "RelativePath": "assets/index-C8jvLSyK.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,7 +33,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/assets/index-BsHd2EfM.js"
+      "OriginalItemSpec": "wwwroot/assets/index-C8jvLSyK.js"
     },
     {
       "Identity": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-fEn8VGTC.css",
@@ -72,25 +72,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/index.html"
-    },
-    {
-      "Identity": "/home/quwy/algoquest/backend-aspnet/wwwroot/vite.svg",
-      "SourceId": "backend-aspnet",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/quwy/algoquest/backend-aspnet/wwwroot/",
-      "BasePath": "_content/backend-aspnet",
-      "RelativePath": "vite.svg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/vite.svg"
     }
   ]
 }

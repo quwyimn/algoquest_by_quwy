@@ -11,9 +11,16 @@ const GameMap = () => {
     const fetchStages = async () => {
       try {
         const response = await axios.get('/api/stages');
-        setStages(response.data);
+        // KIỂM TRA DỮ LIỆU Ở ĐÂY
+        if (Array.isArray(response.data)) {
+          setStages(response.data);
+        } else {
+          // Nếu không phải mảng, đặt nó thành mảng rỗng
+          setStages([]);
+        }
       } catch (err) {
         setError('Không thể tải được danh sách màn chơi.');
+        console.error("Lỗi khi tải màn chơi:", err);
       } finally {
         setLoading(false);
       }
@@ -28,8 +35,8 @@ const GameMap = () => {
     <div className="game-map-container">
       <h2>Bản đồ Môn học</h2>
       <div className="stage-list">
-        {stages.map(stage => (
-          // ĐÃ SỬA LỖI Ở ĐÂY (dùng dấu ` `)
+        {/* KIỂM TRA LẠI Ở ĐÂY TRƯỚC KHI MAP */}
+        {Array.isArray(stages) && stages.map(stage => (
           <Link to={`/stage/${stage.id}`} key={stage.id} className="stage-node">
             <h3>{stage.order}</h3>
             <p>{stage.topic}</p>

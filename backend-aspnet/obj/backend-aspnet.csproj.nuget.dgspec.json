@@ -20,7 +20,7 @@
           "net8.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "https:/http://localhost:5135/api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {

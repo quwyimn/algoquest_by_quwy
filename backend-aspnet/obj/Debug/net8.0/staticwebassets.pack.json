@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-BsHd2EfM.js",
-      "PackagePath": "staticwebassets/assets/index-BsHd2EfM.js"
+      "Id": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-C8jvLSyK.js",
+      "PackagePath": "staticwebassets/assets/index-C8jvLSyK.js"
     },
     {
       "Id": "/home/quwy/algoquest/backend-aspnet/wwwroot/assets/index-fEn8VGTC.css",
@@ -11,10 +11,6 @@
     {
       "Id": "/home/quwy/algoquest/backend-aspnet/wwwroot/index.html",
       "PackagePath": "staticwebassets/index.html"
-    },
-    {
-      "Id": "/home/quwy/algoquest/backend-aspnet/wwwroot/vite.svg",
-      "PackagePath": "staticwebassets/vite.svg"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.backend-aspnet.Microsoft.AspNetCore.StaticWebAssets.props",

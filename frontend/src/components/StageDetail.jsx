@@ -11,10 +11,11 @@ const StageDetail = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`/api/quizzes/${stageId}`);
+        const response = await axios.get(`/api/quizzes/${stageId}`); // Đã sửa lại URL
         setQuizzes(response.data);
-      } catch (err) {
+      } catch (err) { 
         setError('Không thể tải được danh sách câu đố.');
+        console.error("Lỗi khi tải câu đố:", err);
       } finally {
         setLoading(false);
       }
@@ -32,7 +33,7 @@ const StageDetail = () => {
         <>
           <ul>
             {quizzes.map((quiz, index) => (
-              <li key={quiz._id} style={{ textAlign: 'left' }}>
+              <li key={quiz.id} style={{ textAlign: 'left' }}>
                 <p><strong>Câu {index + 1}:</strong> {quiz.question}</p>
               </li>
             ))}
