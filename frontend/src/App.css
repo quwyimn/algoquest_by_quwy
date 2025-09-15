@@ -222,3 +222,47 @@ body {
   border-radius: 4px;
   margin-bottom: 5px;
 }
+
+/* --- CSS cho Bảng Admin --- */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid #555;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #333;
+}
+/* --- CSS cho Màn chơi bị khóa --- */
+.stage-node.locked {
+  cursor: not-allowed;
+  background-color: #333;
+  border-color: #555;
+  color: #777;
+  position: relative;
+}
+
+.stage-node.locked:hover {
+  transform: none; /* Bỏ hiệu ứng phóng to */
+}
+
+.lock-icon {
+  font-size: 2em;
+  position: absolute;
+  opacity: 0.5;
+}
+.delete-button {
+  background-color: #dc3545; /* Màu đỏ */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}

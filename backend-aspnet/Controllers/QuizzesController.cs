@@ -27,4 +27,11 @@ public class QuizzesController : ControllerBase
         await _mongoDbService.CreateQuizAsync(quiz);
         return CreatedAtAction(nameof(GetByStageId), new { stageId = quiz.StageId }, quiz);
     }
+    // DELETE /api/quizzes/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteQuiz(string id)
+    {
+        await _mongoDbService.DeleteQuizAsync(id);
+        return NoContent();
+    }
 }

@@ -17,7 +17,8 @@ const Register = ({ user }) => {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('/api/users/register', {
+      // SỬA LẠI URL Ở ĐÂY
+      await axios.post('http://localhost:5135/api/users/register', {
         username,
         email,
         password,

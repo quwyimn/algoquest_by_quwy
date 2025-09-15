@@ -34,6 +34,7 @@ const QuizPlayer = ({ user }) => {
     fetchQuizzes();
   }, [stageId]);
 
+  // SỬA LẠI EFFECT NÀY
   useEffect(() => {
     if (isFinished && user) {
       const updateProgress = async () => {
@@ -42,6 +43,7 @@ const QuizPlayer = ({ user }) => {
           await axios.post('http://localhost:5135/api/users/update-progress', {
             userId: user.id,
             xpEarned: xpEarned,
+            completedStageId: stageId, // Gửi thêm stageId
           });
           console.log("Đã cập nhật tiến độ thành công!");
         } catch (err) {
@@ -78,10 +80,8 @@ const QuizPlayer = ({ user }) => {
   if (loading) return <div>Đang tải game...</div>;
   if (error) return <div>{error}</div>;
   
-  // Lấy ra câu hỏi hiện tại
   const currentQuiz = quizzes[currentQuestionIndex];
 
-  // KIỂM TRA QUAN TRỌNG Ở ĐÂY
   if (!currentQuiz) {
     return <div>Màn chơi này chưa có câu đố nào.</div>;
   }

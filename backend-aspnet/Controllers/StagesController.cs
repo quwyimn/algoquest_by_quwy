@@ -27,4 +27,11 @@ public class StagesController : ControllerBase
         await _mongoDbService.CreateStageAsync(stage);
         return CreatedAtAction(nameof(Get), new { id = stage.Id }, stage);
     }
+    // DELETE /api/stages/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteStage(string id)
+    {
+        await _mongoDbService.DeleteStageAsync(id);
+        return NoContent(); // Trả về 204 No Content khi xóa thành công
+    }
 }

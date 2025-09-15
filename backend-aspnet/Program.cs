@@ -3,36 +3,35 @@ using backend_aspnet.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CẤU HÌNH CORS "MỞ" ---
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173") // Chỉ cho phép frontend của bạn
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+    });
 });
-// ---------------------------
 
-// --- ĐĂNG KÝ CÁC DỊCH VỤ ---
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
 builder.Services.AddSingleton<MongoDbService>();
-builder.Services.AddControllers();
-// ---------------------------
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// --- CẤU HÌNH PIPELINE ---
-// app.UseHttpsRedirection(); // Tắt đi để tránh lỗi
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-// --- SỬ DỤNG CORS ---
 app.UseCors();
-// --------------------
-
 app.UseAuthorization();
 app.MapControllers();
-// ---------------------------
 
 app.Run();

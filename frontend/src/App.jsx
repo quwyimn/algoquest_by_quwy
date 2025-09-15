@@ -69,7 +69,7 @@ function App() {
               </AdminRoute>
             } />
 
-            <Route path="/" element={user ? <GameMap /> : <Navigate to="/login" />} />
+            <Route path="/" element={user ? <GameMap user={user} /> : <Navigate to="/login" />} />
             <Route path="/stage/:stageId" element={user ? <StageDetail /> : <Navigate to="/login" />} />
             <Route path="/play/:stageId" element={user ? <QuizPlayer user={user} /> : <Navigate to="/login" />} />
           </Routes>
