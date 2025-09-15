@@ -1,11 +1,13 @@
 import React from 'react';
+import ManageStages from './ManageStages'; // 1. Import component mới
 
 const AdminDashboard = () => {
   return (
     <div>
       <h2>Trang Quản trị (Admin Dashboard)</h2>
-      <p>Chào mừng đến với khu vực quản lý. Tại đây bạn có thể thêm/sửa/xóa các màn chơi và câu đố.</p>
-      {/* Chúng ta sẽ thêm các form quản lý vào đây sau */}
+      <hr />
+      <ManageStages /> {/* 2. Hiển thị component quản lý màn chơi */}
+      {/* Chúng ta sẽ thêm component quản lý câu đố vào đây sau */}
     </div>
   );
 };

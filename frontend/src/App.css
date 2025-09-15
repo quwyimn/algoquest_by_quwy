@@ -176,3 +176,49 @@ body {
   background-color: #646cff;
   color: white;
 }
+
+/* --- CSS cho Trang Admin --- */
+.admin-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #242424;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.admin-form input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: white;
+}
+
+.admin-form button {
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background-color: #1e88e5; /* Màu xanh dương khác */
+  color: white;
+}
+
+.admin-list {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-list li {
+  background-color: #333;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}

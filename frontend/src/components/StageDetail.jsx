@@ -11,9 +11,15 @@ const StageDetail = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`/api/quizzes/${stageId}`); // Đã sửa lại URL
-        setQuizzes(response.data);
-      } catch (err) { 
+        // ĐÃ SỬA LẠI URL CHO ĐÚNG
+        const response = await axios.get(`http://localhost:5135/api/quizzes/${stageId}`);
+        
+        if (Array.isArray(response.data)) {
+          setQuizzes(response.data);
+        } else {
+          setQuizzes([]);
+        }
+      } catch (err) {
         setError('Không thể tải được danh sách câu đố.');
         console.error("Lỗi khi tải câu đố:", err);
       } finally {
@@ -32,7 +38,7 @@ const StageDetail = () => {
       {quizzes.length > 0 ? (
         <>
           <ul>
-            {quizzes.map((quiz, index) => (
+            {Array.isArray(quizzes) && quizzes.map((quiz, index) => (
               <li key={quiz.id} style={{ textAlign: 'left' }}>
                 <p><strong>Câu {index + 1}:</strong> {quiz.question}</p>
               </li>

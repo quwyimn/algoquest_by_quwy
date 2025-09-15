@@ -9,7 +9,8 @@ const Login = ({ onLoginSuccess, user }) => {
   const navigate = useNavigate();
 
   if (user) {
-    return <Navigate to="/" replace />;
+    // Nếu đã đăng nhập, chuyển hướng dựa trên vai trò
+    return <Navigate to={user.role === 'Admin' ? '/admin' : '/'} replace />;
   }
 
   const handleLogin = async () => {
@@ -19,8 +20,17 @@ const Login = ({ onLoginSuccess, user }) => {
         email,
         password,
       });
-      onLoginSuccess(response.data.user);
-      navigate('/');
+
+      const loggedInUser = response.data.user;
+      onLoginSuccess(loggedInUser);
+
+      // CHUYỂN HƯỚNG DỰA TRÊN VAI TRÒ SAU KHI ĐĂNG NHẬP
+      if (loggedInUser.role === 'Admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+
     } catch (err) {
       setError(err.response?.data?.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
     }

@@ -39,6 +39,7 @@ function App() {
           <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             {user ? (
               <>
+                {/* THÊM LẠI LOGIC HIỂN THỊ LINK ADMIN Ở ĐÂY */}
                 {user.role === 'Admin' && (
                   <Link to="/admin" style={{ color: 'white', fontWeight: 'bold' }}>
                     Trang Admin

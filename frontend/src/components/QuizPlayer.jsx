@@ -18,9 +18,13 @@ const QuizPlayer = ({ user }) => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get(`/api/quizzes/${stageId}`); // Đã sửa lại URL
-        setQuizzes(response.data);
-      } catch (err) { // ĐÃ SỬA LẠI Ở ĐÂY
+        const response = await axios.get(`http://localhost:5135/api/quizzes/${stageId}`);
+        if (Array.isArray(response.data)) {
+          setQuizzes(response.data);
+        } else {
+          setQuizzes([]);
+        }
+      } catch (err) {
         setError('Không thể tải câu đố.');
         console.error("Lỗi khi tải câu đố:", err);
       } finally {
@@ -35,7 +39,7 @@ const QuizPlayer = ({ user }) => {
       const updateProgress = async () => {
         try {
           const xpEarned = score * 10;
-          await axios.post('/api/users/update-progress', {
+          await axios.post('http://localhost:5135/api/users/update-progress', {
             userId: user.id,
             xpEarned: xpEarned,
           });
@@ -73,7 +77,14 @@ const QuizPlayer = ({ user }) => {
 
   if (loading) return <div>Đang tải game...</div>;
   if (error) return <div>{error}</div>;
-  if (quizzes.length === 0) return <div>Màn chơi này chưa có câu đố nào.</div>;
+  
+  // Lấy ra câu hỏi hiện tại
+  const currentQuiz = quizzes[currentQuestionIndex];
+
+  // KIỂM TRA QUAN TRỌNG Ở ĐÂY
+  if (!currentQuiz) {
+    return <div>Màn chơi này chưa có câu đố nào.</div>;
+  }
 
   if (isFinished) {
     const xpEarned = score * 10;
@@ -86,8 +97,6 @@ const QuizPlayer = ({ user }) => {
       </div>
     );
   }
-
-  const currentQuiz = quizzes[currentQuestionIndex];
 
   return (
     <div className="quiz-player">
