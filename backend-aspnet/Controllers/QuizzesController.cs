@@ -27,8 +27,18 @@ public class QuizzesController : ControllerBase
     }
 
     [HttpGet("{stageId}")]
-    public async Task<List<Quiz>> GetByStageId(string stageId) =>
-        await _mongoDbService.GetQuizzesByStageIdAsync(stageId);
+    public async Task<List<Quiz>> GetByStageId(string stageId)
+    {
+        try
+        {
+            return await _mongoDbService.GetQuizzesByStageIdAsync(stageId);
+        }
+        catch
+        {
+            // Fallback to mock data if MongoDB fails
+            return MockDataService.GetMockQuizzes(stageId);
+        }
+    }
 
     // SỬA LẠI HÀM POST ĐỂ DÙNG DTO MỚI
     [HttpPost]

@@ -9,6 +9,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AdminDashboard from './components/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import ThemeToggle from './components/ThemeToggle';
+import TestPage from './components/TestPage';
 
 // Layout chính, có Header
 const MainLayout = ({ user, handleLogout }) => {
@@ -33,6 +35,7 @@ const MainLayout = ({ user, handleLogout }) => {
               <Link to="/register" style={{ color: 'white' }}>Đăng ký</Link>
             </>
           )}
+          <ThemeToggle />
         </nav>
       </header>
       <main>
@@ -68,6 +71,7 @@ function App() {
       <Routes>
         {/* TẤT CẢ CÁC TRANG ĐỀU NẰM TRONG MAINLAYOUT */}
         <Route element={<MainLayout user={user} handleLogout={handleLogout} />}>
+          <Route path="/test" element={<TestPage />} />
           <Route path="/admin" element={<AdminRoute user={user}><AdminDashboard /></AdminRoute>} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} user={user} />} />
           <Route path="/register" element={<Register user={user} />} />

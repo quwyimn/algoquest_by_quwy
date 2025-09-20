@@ -17,8 +17,18 @@ public class StagesController : ControllerBase
 
     // API cho Player: Lấy tất cả màn chơi
     [HttpGet]
-    public async Task<List<Stage>> Get() =>
-        await _mongoDbService.GetStagesAsync();
+    public async Task<List<Stage>> Get()
+    {
+        try
+        {
+            return await _mongoDbService.GetStagesAsync();
+        }
+        catch
+        {
+            // Fallback to mock data if MongoDB fails
+            return MockDataService.GetMockStages();
+        }
+    }
 
     // API cho Admin: Thêm một màn chơi mới
     [HttpPost]

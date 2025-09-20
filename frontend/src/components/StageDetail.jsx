@@ -43,8 +43,20 @@ const StageDetail = () => {
     fetchGameData();
   }, [stageId]);
 
-  if (loading) return <div>Đang tải màn chơi...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return (
+    <div className="loading-container">
+      <div className="loading-spinner"></div>
+      <div className="loading-text">Đang tải màn chơi...</div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="error-container">
+      <div className="error-icon">⚠️</div>
+      <div className="error-text">Lỗi tải dữ liệu</div>
+      <div className="error-description">{error}</div>
+    </div>
+  );
 
   const backgroundStyle = {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/images/${stageInfo?.backgroundImageUrl})`,
@@ -60,7 +72,7 @@ const StageDetail = () => {
   };
 
   return (
-    <div style={backgroundStyle}>
+    <div className="stage-detail-container" style={backgroundStyle}>
       <h2 style={{ color: 'white', textShadow: '2px 2px 4px #000' }}>
         {stageInfo?.title}
       </h2>

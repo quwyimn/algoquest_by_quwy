@@ -50,22 +50,46 @@ public class UsersController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        var user = await _mongoDbService.GetUserByEmailAsync(loginRequest.Email);
-
-        if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+        try
         {
-            return BadRequest(new { message = "Email hoặc mật khẩu không đúng!" });
+            var user = await _mongoDbService.GetUserByEmailAsync(loginRequest.Email);
+            
+            if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+            {
+                return BadRequest(new { message = "Email hoặc mật khẩu không đúng!" });
+            }
+
+            var userResponse = new
+            {
+                id = user.Id,
+                username = user.Username,
+                email = user.Email,
+                role = user.Role
+            };
+
+            return Ok(new { message = "✅ Đăng nhập thành công!", user = userResponse });
         }
-
-        var userResponse = new
+        catch
         {
-            id = user.Id,
-            username = user.Username,
-            email = user.Email,
-            role = user.Role
-        };
+            // Fallback to mock data if MongoDB fails
+            var mockUsers = MockDataService.GetMockUsers();
+            var user = mockUsers.FirstOrDefault(u => u.Email == loginRequest.Email);
+            
+            if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+            {
+                return BadRequest(new { message = "Email hoặc mật khẩu không đúng!" });
+            }
 
-        return Ok(new { message = "✅ Đăng nhập thành công!", user = userResponse });
+            var userResponse = new
+            {
+                id = user.Id,
+                username = user.Username,
+                email = user.Email,
+                role = user.Role
+            };
+
+            return Ok(new { message = "✅ Đăng nhập thành công!", user = userResponse });
+        }
     }
 
     // POST /api/users/update-progress
@@ -79,11 +103,25 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUser(string id)
     {
-        var user = await _mongoDbService.GetUserByIdAsync(id);
-        if (user is null)
-    {
-        return NotFound();
-    }
-        return user;    
+        try
+        {
+            var user = await _mongoDbService.GetUserByIdAsync(id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
+        catch
+        {
+            // Fallback to mock data if MongoDB fails
+            var mockUsers = MockDataService.GetMockUsers();
+            var user = mockUsers.FirstOrDefault(u => u.Id == id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
     }
 }

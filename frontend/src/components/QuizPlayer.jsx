@@ -89,8 +89,20 @@ const QuizPlayer = ({ user }) => {
     }
   }, [isFinished, user, score, stageId]);
 
-  if (loading) return <div>Đang tải game...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return (
+    <div className="loading-container">
+      <div className="loading-spinner"></div>
+      <div className="loading-text">Đang tải game...</div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="error-container">
+      <div className="error-icon">⚠️</div>
+      <div className="error-text">Lỗi tải dữ liệu</div>
+      <div className="error-description">{error}</div>
+    </div>
+  );
   
   const currentQuiz = quizzes[currentQuestionIndex];
 
@@ -112,9 +124,9 @@ const QuizPlayer = ({ user }) => {
     return (
       <div style={backgroundStyle}>
         <div className="quiz-results">
-          <h2>Hoàn thành!</h2>
-          <p>Điểm của bạn: {score} / {quizzes.length}</p>
-          <p>XP nhận được: {score * 10}</p>
+          <h2>🎉 Hoàn thành!</h2>
+          <div className="score">Điểm: {score} / {quizzes.length}</div>
+          <p>XP nhận được: <strong>{score * 10}</strong></p>
           <p>Bạn đã mở khóa màn chơi tiếp theo!</p>
           <button onClick={() => navigate('/')} className="next-button">Về Bản đồ chính</button>
         </div>

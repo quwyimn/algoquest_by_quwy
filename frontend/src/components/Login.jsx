@@ -6,6 +6,7 @@ const Login = ({ onLoginSuccess, user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   if (user) {
@@ -15,11 +16,17 @@ const Login = ({ onLoginSuccess, user }) => {
 
   const handleLogin = async () => {
     setError('');
+    setLoading(true);
+    
+    console.log('Đang đăng nhập với:', { email, password });
+    
     try {
       const response = await axios.post('http://localhost:5135/api/users/login', {
         email,
         password,
       });
+
+      console.log('Response từ server:', response.data);
 
       const loggedInUser = response.data.user;
       onLoginSuccess(loggedInUser);
@@ -32,7 +39,10 @@ const Login = ({ onLoginSuccess, user }) => {
       }
 
     } catch (err) {
+      console.error('Lỗi đăng nhập:', err);
       setError(err.response?.data?.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,7 +58,13 @@ const Login = ({ onLoginSuccess, user }) => {
         <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
       </div>
       {error && <p className="error-message">{error}</p>}
-      <button onClick={handleLogin} className="login-button">Đăng nhập</button>
+      <button 
+        onClick={handleLogin} 
+        className="login-button" 
+        disabled={loading}
+      >
+        {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+      </button>
     </div>
   );
 };

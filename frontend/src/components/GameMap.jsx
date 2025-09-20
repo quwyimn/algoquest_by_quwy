@@ -38,8 +38,20 @@ const GameMap = ({ user }) => {
     fetchGameData();
   }, [user]);
 
-  if (loading) return <div>Đang tải bản đồ...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return (
+    <div className="loading-container">
+      <div className="loading-spinner"></div>
+      <div className="loading-text">Đang tải bản đồ...</div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="error-container">
+      <div className="error-icon">⚠️</div>
+      <div className="error-text">Lỗi tải dữ liệu</div>
+      <div className="error-description">{error}</div>
+    </div>
+  );
 
   return (
     <div className="game-map-container">
