@@ -34,4 +34,10 @@ public class StagesController : ControllerBase
         await _mongoDbService.DeleteStageAsync(id);
         return NoContent(); // Trả về 204 No Content khi xóa thành công
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateStage(string id, [FromBody] Stage updatedStage)
+    {
+        await _mongoDbService.UpdateStageAsync(id, updatedStage);
+        return NoContent(); // Trả về 204 No Content khi sửa thành công
+    }
 }

@@ -45,17 +45,21 @@ const GameMap = ({ user }) => {
     <div className="game-map-container">
       <h2>Bản đồ Môn học</h2>
       <div className="stage-list">
-        {/* SỬA LẠI Ở ĐÂY */}
         {stages.map(stage => {
+          // --- LOGIC MỞ KHÓA ĐÃ ĐƯỢC SỬA LẠI ---
           let isUnlocked = false;
           if (stage.order === 1) {
+            // Màn 1 luôn mở
             isUnlocked = true;
           } else {
+            // Tìm màn chơi trước đó
             const prevStage = stages.find(s => s.order === stage.order - 1);
+            // Màn hiện tại được mở nếu ID của màn trước đó đã có trong danh sách hoàn thành
             if (prevStage && completedStages.has(prevStage.id)) {
               isUnlocked = true;
             }
           }
+          // ---------------------------------------
 
           if (isUnlocked) {
             return (

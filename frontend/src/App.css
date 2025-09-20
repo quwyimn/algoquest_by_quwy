@@ -1,268 +1,303 @@
-/* frontend/src/App.css */
-body {
-  background-color: #1a1a1a;
-  color: rgba(255, 255, 255, 0.87);
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
+/* === ALGOQUEST THEME - PHIÊN BẢN HOÀN THIỆN === */
+
+/* --- BIẾN MÀU SẮC & FONT CHỮ --- */
+:root {
+  --background-dark: #1a202c;
+  --surface-dark: #2d3748;
+  --primary-accent: #38b2ac;
+  --primary-accent-hover: #4fd1c5;
+  --text-light: #edf2f7;
+  --text-secondary: #a0aec0;
+  --success-color: #48bb78;
+  --error-color: #f56565;
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- THIẾT LẬP CHUNG --- */
+html, body, #root {
+  height: 100%;
   margin: 0;
 }
 
+body {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  font-family: var(--font-main);
+  text-align: center;
+}
+
 .App {
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
+/* SỬA LẠI Ở ĐÂY */
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- HEADER --- */
 .App-header {
-  padding-bottom: 2rem;
-  border-bottom: 2px solid #646cff;
+  padding: 1rem 2rem;
+  border-bottom: 2px solid var(--primary-accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--surface-dark);
 }
 
-/* --- CSS cho Bản đồ Game --- */
-.game-map-container {
-  padding: 20px;
+.App-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
 }
 
-.stage-list {
+.App-header nav a, .App-header nav button {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.App-header nav a:hover, .App-header nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- BẢN ĐỒ GAME & TRẠM CÂU HỎI --- */
+.game-map-container, .stage-detail-container {
+  min-height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.stage-list, .quiz-stations-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 40px;
   padding: 40px 0;
+  width: 100%;
 }
 
-.stage-node {
-  background-color: #242424;
-  border: 2px solid #646cff;
-  border-radius: 50%;
+.stage-node, .quiz-station {
   width: 150px;
   height: 150px;
+  background: var(--surface-dark);
+  border: 3px solid var(--primary-accent);
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out, background-color 0.2s;
+  transition: all 0.3s ease;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-light);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
-.stage-node:hover {
-  transform: scale(1.1);
-  background-color: #646cff;
-  color: #1a1a1a;
+.stage-node:hover, .quiz-station:hover {
+  transform: translateY(-10px) scale(1.05);
+  background-color: var(--primary-accent);
+  color: white;
+  box-shadow: 0 8px 25px rgba(56, 178, 172, 0.6);
 }
 
-.stage-node h3 {
-  font-size: 1.5em;
+.stage-node h3, .quiz-station {
+  font-size: 1.5rem;
   margin: 0;
 }
 
 .stage-node p {
-  font-size: 0.9em;
+  font-size: 1rem;
   margin-top: 5px;
+  color: var(--text-secondary);
 }
 
-/* --- CSS cho Màn hình Chơi Game --- */
+.stage-node.locked {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.stage-node.locked:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.lock-icon {
+  font-size: 2.5em;
+  position: absolute;
+  opacity: 0.3;
+}
+
+.quiz-station.answered {
+  background-color: var(--success-color);
+  border-color: #68d391;
+  color: white;
+}
+
+.checkmark {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2em;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+/* --- MÀN HÌNH CHƠI GAME --- */
 .quiz-player {
   max-width: 800px;
+  width: 90%;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #242424;
-  border-radius: 8px;
+  padding: 2rem;
+  background-color: rgba(45, 55, 72, 0.9);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .question-text {
-  font-size: 1.5em;
+  font-size: 1.8em;
   margin-bottom: 30px;
 }
 
 .options-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 20px;
 }
 
 .quiz-option {
-  padding: 15px;
+  padding: 18px;
   font-size: 1.1em;
   border-radius: 8px;
-  border: 1px solid #646cff;
+  border: 2px solid var(--primary-accent);
   background-color: transparent;
-  color: #646cff;
+  color: var(--text-light);
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s;
 }
 
 .quiz-option:not(:disabled):hover {
-  background-color: #646cff;
-  color: #1a1a1a;
-}
-
-.quiz-option:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+  background-color: var(--primary-accent);
+  color: white;
 }
 
 .quiz-option.correct {
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: var(--success-color);
+  border-color: var(--success-color);
   color: white;
 }
 
 .quiz-option.incorrect {
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: var(--error-color);
+  border-color: var(--error-color);
   color: white;
 }
 
-.next-button, .start-quiz-button {
-  margin-top: 30px;
-  padding: 10px 30px;
-  font-size: 1.2em;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background-color: #646cff;
-  color: white;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.quiz-results {
-  font-size: 1.5em;
-}
-
-/* --- CSS cho Trang Đăng nhập --- */
-.login-container {
-  max-width: 400px;
+/* --- FORM (Đăng nhập, Đăng ký, Admin) --- */
+.login-container, .admin-section {
+  max-width: 500px;
   margin: 40px auto;
-  padding: 20px;
-  background-color: #242424;
-  border-radius: 8px;
+  padding: 2rem;
+  background-color: var(--surface-dark);
+  border-radius: 12px;
+  text-align: left;
 }
 
 .form-group {
-  margin-bottom: 15px;
-  text-align: left;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-.form-group input {
+.form-group input, .admin-form input, .admin-form select {
   width: 100%;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 12px;
+  border-radius: 6px;
   border: 1px solid #555;
   background-color: #333;
-  color: white;
-  box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+  color: var(--text-light);
+  box-sizing: border-box;
+  font-size: 1rem;
 }
 
 .error-message {
-  color: #ff4d4d;
+  color: var(--error-color);
   margin-bottom: 15px;
 }
 
-.login-button {
+.login-button, .next-button, .start-quiz-button, .admin-form button {
   width: 100%;
-  padding: 10px;
-  font-size: 1.1em;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
   border: none;
-  background-color: #646cff;
+  background-color: var(--primary-accent);
   color: white;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s;
 }
 
-/* --- CSS cho Trang Admin --- */
-.admin-section {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #242424;
-  border-radius: 8px;
-  text-align: left;
+.login-button:hover, .next-button:hover, .start-quiz-button:hover, .admin-form button:hover {
+  background-color: var(--primary-accent-hover);
 }
 
-.admin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2rem;
-}
-
-.admin-form input {
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #333;
-  color: white;
-}
-
-.admin-form button {
-  padding: 10px;
-  font-size: 1em;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background-color: #1e88e5; /* Màu xanh dương khác */
-  color: white;
-}
-
-.admin-list {
-  list-style: none;
-  padding: 0;
-}
-
+/* --- TRANG ADMIN --- */
 .admin-list li {
   background-color: #333;
-  padding: 10px 15px;
-  border-radius: 4px;
-  margin-bottom: 5px;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* --- CSS cho Bảng Admin --- */
+.delete-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .admin-table th, .admin-table td {
   border: 1px solid #555;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
 }
 
 .admin-table th {
   background-color: #333;
-}
-/* --- CSS cho Màn chơi bị khóa --- */
-.stage-node.locked {
-  cursor: not-allowed;
-  background-color: #333;
-  border-color: #555;
-  color: #777;
-  position: relative;
-}
-
-.stage-node.locked:hover {
-  transform: none; /* Bỏ hiệu ứng phóng to */
-}
-
-.lock-icon {
-  font-size: 2em;
-  position: absolute;
-  opacity: 0.5;
-}
-.delete-button {
-  background-color: #dc3545; /* Màu đỏ */
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
 }

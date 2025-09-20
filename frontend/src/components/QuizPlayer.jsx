@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const QuizPlayer = ({ user }) => {
-  const { stageId } = useParams();
+  const { stageId, questionIndex } = useParams();
   const navigate = useNavigate();
 
   const [quizzes, setQuizzes] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [stageInfo, setStageInfo] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(parseInt(questionIndex, 10) || 0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [hasAnswered, setHasAnswered] = useState(false);
@@ -16,48 +17,40 @@ const QuizPlayer = ({ user }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const fetchGameData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5135/api/quizzes/${stageId}`);
-        if (Array.isArray(response.data)) {
-          setQuizzes(response.data);
-        } else {
-          setQuizzes([]);
+        const [quizzesResponse, stagesResponse] = await Promise.all([
+          axios.get(`http://localhost:5135/api/quizzes/${stageId}`),
+          axios.get('http://localhost:5135/api/stages')
+        ]);
+
+        if (Array.isArray(quizzesResponse.data)) {
+          setQuizzes(quizzesResponse.data);
+        }
+        if (Array.isArray(stagesResponse.data)) {
+          const currentStage = stagesResponse.data.find(s => s.id === stageId);
+          setStageInfo(currentStage);
         }
       } catch (err) {
-        setError('Không thể tải câu đố.');
-        console.error("Lỗi khi tải câu đố:", err);
+        setError('Không thể tải dữ liệu game.');
+        console.error("Lỗi khi tải dữ liệu game  ", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchQuizzes();
+    fetchGameData();
   }, [stageId]);
-
-  // SỬA LẠI EFFECT NÀY
-  useEffect(() => {
-    if (isFinished && user) {
-      const updateProgress = async () => {
-        try {
-          const xpEarned = score * 10;
-          await axios.post('http://localhost:5135/api/users/update-progress', {
-            userId: user.id,
-            xpEarned: xpEarned,
-            completedStageId: stageId, // Gửi thêm stageId
-          });
-          console.log("Đã cập nhật tiến độ thành công!");
-        } catch (err) {
-          console.error("Lỗi khi cập nhật tiến độ:", err);
-        }
-      };
-      updateProgress();
-    }
-  }, [isFinished, user, score, stageId]);
 
   const handleAnswerClick = (optionIndex) => {
     if (hasAnswered) return;
     setSelectedAnswer(optionIndex);
     setHasAnswered(true);
+    
+    const savedAnswers = JSON.parse(localStorage.getItem(`answered_${stageId}`)) || [];
+    const newAnswered = new Set(savedAnswers);
+    newAnswered.add(quizzes[currentQuestionIndex].id);
+    localStorage.setItem(`answered_${stageId}`, JSON.stringify([...newAnswered]));
+
     if (optionIndex === quizzes[currentQuestionIndex].correctAnswer) {
       setScore(prevScore => prevScore + 1);
     }
@@ -73,9 +66,28 @@ const QuizPlayer = ({ user }) => {
     }
   };
 
-  const handleReturnToMap = () => {
-    navigate('/');
+  const handleReturnToDetail = () => {
+    navigate(`/stage/${stageId}`);
   };
+
+  useEffect(() => {
+    if (isFinished && user) {
+      const updateProgress = async () => {
+        try {
+          const xpEarned = score * 10;
+          await axios.post('http://localhost:5135/api/users/update-progress', {
+            userId: user.id,
+            xpEarned: xpEarned,
+            completedStageId: stageId,
+          });
+          console.log("Đã cập nhật tiến độ thành công!");
+        } catch (err) {
+          console.error("Lỗi khi cập nhật tiến độ:", err);
+        }
+      };
+      updateProgress();
+    }
+  }, [isFinished, user, score, stageId]);
 
   if (loading) return <div>Đang tải game...</div>;
   if (error) return <div>{error}</div>;
@@ -86,49 +98,56 @@ const QuizPlayer = ({ user }) => {
     return <div>Màn chơi này chưa có câu đố nào.</div>;
   }
 
+  const backgroundStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/images/${stageInfo?.backgroundImageUrl})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  };
+
   if (isFinished) {
-    const xpEarned = score * 10;
     return (
-      <div className="quiz-results">
-        <h2>Hoàn thành!</h2>
-        <p>Điểm của bạn: {score} / {quizzes.length}</p>
-        <p>XP nhận được: {xpEarned}</p>
-        <button onClick={handleReturnToMap}>Quay về bản đồ</button>
+      <div style={backgroundStyle}>
+        <div className="quiz-results">
+          <h2>Hoàn thành!</h2>
+          <p>Điểm của bạn: {score} / {quizzes.length}</p>
+          <p>XP nhận được: {score * 10}</p>
+          <p>Bạn đã mở khóa màn chơi tiếp theo!</p>
+          <button onClick={() => navigate('/')} className="next-button">Về Bản đồ chính</button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="quiz-player">
-      <h3>Câu {currentQuestionIndex + 1} / {quizzes.length}</h3>
-      <p className="question-text">{currentQuiz.question}</p>
-      <div className="options-container">
-        {currentQuiz.options.map((option, index) => {
-          let buttonClass = 'quiz-option';
-          if (hasAnswered) {
-            if (index === currentQuiz.correctAnswer) {
-              buttonClass += ' correct';
-            } else if (index === selectedAnswer) {
-              buttonClass += ' incorrect';
-            }
-          }
-          return (
+    <div style={backgroundStyle}>
+      <div className="quiz-player">
+        <h3>Câu {currentQuestionIndex + 1} / {quizzes.length}</h3>
+        <p className="question-text">{currentQuiz.question}</p>
+        <div className="options-container">
+          {Array.isArray(currentQuiz.options) && currentQuiz.options.map((option, index) => (
             <button
               key={index}
-              className={buttonClass}
+              className={
+                `quiz-option ${hasAnswered ? (index === currentQuiz.correctAnswer ? 'correct' : (index === selectedAnswer ? 'incorrect' : '')) : ''}`
+              }
               onClick={() => handleAnswerClick(index)}
               disabled={hasAnswered}
             >
               {option}
             </button>
-          );
-        })}
+          ))}
+        </div>
+        {hasAnswered && (
+          <button onClick={handleNextQuestion} className="next-button">
+            {currentQuestionIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Xem kết quả'}
+          </button>
+        )}
+        <button onClick={handleReturnToDetail} style={{marginTop: '10px', background: 'grey'}}>Quay lại</button>
       </div>
-      {hasAnswered && (
-        <button onClick={handleNextQuestion} className="next-button">
-          {currentQuestionIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Xem kết quả'}
-        </button>
-      )}
     </div>
   );
 };

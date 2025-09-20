@@ -79,7 +79,7 @@ public class MongoDbService
     public async Task DeleteStageAsync(string id)
     {
         await _stagesCollection.DeleteOneAsync(s => s.Id == id);
-       
+
         await _quizzesCollection.DeleteManyAsync(q => q.StageId == id);
     }
 
@@ -87,5 +87,9 @@ public class MongoDbService
     public async Task DeleteQuizAsync(string id)
     {
         await _quizzesCollection.DeleteOneAsync(q => q.Id == id);
+    }
+    public async Task UpdateStageAsync(string id, Stage updatedStage)
+    {
+        await _stagesCollection.ReplaceOneAsync(s => s.Id == id, updatedStage);
     }
 }

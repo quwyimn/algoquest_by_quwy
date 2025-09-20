@@ -3,9 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend_aspnet.Models;
 
-
-[BsonIgnoreExtraElements] 
-
+[BsonIgnoreExtraElements] // THÊM DÒNG NÀY VÀO
 public class Stage
 {
     [BsonId]
@@ -27,10 +25,6 @@ public class Stage
     [BsonElement("icon")]
     public string Icon { get; set; } = null!;
 
-    // THÊM 2 THUỘC TÍNH NÀY VÀO
-    [BsonElement("createdAt")]
-    public DateTime CreatedAt { get; set; }
-
-    [BsonElement("updatedAt")]
-    public DateTime UpdatedAt { get; set; }
+    [BsonElement("backgroundImageUrl")]
+    public string BackgroundImageUrl { get; set; } = null!;
 }

@@ -4,6 +4,17 @@ using backend_aspnet.Services;
 
 namespace backend_aspnet.Controllers;
 
+// TẠO MỘT LỚP DTO MỚI Ở ĐÂY
+public class CreateQuizRequest
+{
+    public string StageId { get; set; } = null!;
+    public string Question { get; set; } = null!;
+    public List<string> Options { get; set; } = null!;
+    public int CorrectAnswer { get; set; }
+    public string? Difficulty { get; set; }
+    public string? BloomTag { get; set; }
+}
+
 [ApiController]
 [Route("api/[controller]")]
 public class QuizzesController : ControllerBase
@@ -15,19 +26,28 @@ public class QuizzesController : ControllerBase
         _mongoDbService = mongoDbService;
     }
 
-    // API cho Player: Lấy câu đố của một màn chơi
     [HttpGet("{stageId}")]
     public async Task<List<Quiz>> GetByStageId(string stageId) =>
         await _mongoDbService.GetQuizzesByStageIdAsync(stageId);
 
-    // API cho Admin: Thêm một câu đố mới
+    // SỬA LẠI HÀM POST ĐỂ DÙNG DTO MỚI
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Quiz quiz)
+    public async Task<IActionResult> Post([FromBody] CreateQuizRequest request)
     {
-        await _mongoDbService.CreateQuizAsync(quiz);
-        return CreatedAtAction(nameof(GetByStageId), new { stageId = quiz.StageId }, quiz);
+        var newQuiz = new Quiz
+        {
+            StageId = request.StageId,
+            Question = request.Question,
+            Options = request.Options,
+            CorrectAnswer = request.CorrectAnswer,
+            Difficulty = request.Difficulty ?? "Dễ",
+            bloomtag = request.BloomTag ?? "Nhớ"
+        };
+
+        await _mongoDbService.CreateQuizAsync(newQuiz);
+        return CreatedAtAction(nameof(GetByStageId), new { stageId = newQuiz.StageId }, newQuiz);
     }
-    // DELETE /api/quizzes/{id}
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQuiz(string id)
     {
