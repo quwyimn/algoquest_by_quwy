@@ -2,14 +2,16 @@ import React from 'react';
 
 const TestPage = () => {
   return (
-    <div style={{
+    <div className="test-page" style={{
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: 'calc(100vh - 120px)',
       padding: '2rem',
-      textAlign: 'center'
+      textAlign: 'center',
+      width: '100%',
+      boxSizing: 'border-box'
     }}>
       <h1 style={{ color: 'white', marginBottom: '2rem' }}>
         🎉 AlgoQuest Test Page

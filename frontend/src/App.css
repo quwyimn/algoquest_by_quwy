@@ -94,6 +94,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   position: relative;
+  width: 100%;
 }
 
 main {
@@ -105,8 +106,9 @@ main {
   padding: var(--space-lg);
   position: relative;
   z-index: 1;
-  min-height: calc(100vh - 120px); /* Trừ đi chiều cao header */
+  min-height: calc(100vh - 120px);
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Glassmorphism utility classes */
@@ -473,7 +475,7 @@ main {
 /* --- FORM (Đăng nhập, Đăng ký, Admin) --- */
 .login-container, .admin-section {
   max-width: 500px;
-  margin: var(--space-2xl) auto;
+  margin: 0 auto;
   padding: var(--space-2xl);
   background: var(--surface-glass);
   backdrop-filter: blur(20px);
@@ -892,6 +894,18 @@ main {
     --text-secondary: #ffffff;
     --surface-glass: rgba(0, 0, 0, 0.8);
   }
+}
+
+/* --- TEST PAGE --- */
+.test-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* --- THEME TOGGLE --- */

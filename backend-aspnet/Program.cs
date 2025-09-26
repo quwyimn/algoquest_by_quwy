@@ -36,6 +36,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseAuthorization();
+
+// Add explicit OPTIONS handling for CORS preflight
+app.MapMethods("/api/{*path}", new[] { "OPTIONS" }, (HttpContext context) =>
+{
+    context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5173";
+    context.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
+    context.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization";
+    context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+    return Results.Ok();
+});
+
 app.MapControllers();
 
 app.Run();

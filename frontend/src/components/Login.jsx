@@ -40,7 +40,9 @@ const Login = ({ onLoginSuccess, user }) => {
 
     } catch (err) {
       console.error('Lỗi đăng nhập:', err);
-      setError(err.response?.data?.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
+      console.error('Response data:', err.response?.data);
+      console.error('Status:', err.response?.status);
+      setError(err.response?.data?.message || `Lỗi ${err.response?.status || 'không xác định'}: ${err.message}`);
     } finally {
       setLoading(false);
     }
